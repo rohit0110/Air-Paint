@@ -45,18 +45,17 @@ class handDetector():
 
 def main():
     #SPECIFY COLOR PALLETE 
-    colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255),(0,0,0)]
     color_index = 0
+    colors = [(0,0,255),(0,162,255),(0,255,255),(0,255,0),(255,255,0),(255,0,0),(255,0,162),(255,0,255),(0,0,0)] # R O Y G C B Pu Pi Black
 
     #CREATE PAINT WINDOW
     paintWindow = np.zeros((720,1280,3),np.uint8)
-    cv2.namedWindow('Paint',cv2.WINDOW_AUTOSIZE)
 
     #GET WEBCAM
     cap = cv2.VideoCapture(0)
     cap.set(3,1280)
     cap.set(4,720)
-    detector = handDetector(min_detection_confidence=0.6,min_track_confidence=0.65)
+    detector = handDetector(min_detection_confidence=0.8,min_track_confidence=0.65)
 
     xp,yp = 0,0 #Variables to know previous position of hand
     prev_state = 0 # 0 for selection mode 1 for drawing mode
@@ -72,13 +71,23 @@ def main():
         frame = cv2.rectangle(frame, (160,1), (255,65), colors[0], -1)
         frame = cv2.rectangle(frame, (275,1), (370,65), colors[1], -1)
         frame = cv2.rectangle(frame, (390,1), (485,65), colors[2], -1)
-        frame = cv2.rectangle(frame, (500,1), (600,65), (0,0,0), -1)
+        frame = cv2.rectangle(frame, (505,1), (600,65), colors[3], -1)
+        frame = cv2.rectangle(frame, (620,1), (715,65), colors[4], -1)
+        frame = cv2.rectangle(frame, (735,1), (830,65), colors[5], -1)
+        frame = cv2.rectangle(frame, (850,1), (945,65), colors[6], -1)
+        frame = cv2.rectangle(frame, (965,1), (1060,65), colors[7], -1)
+        frame = cv2.rectangle(frame, (1080,1), (1175,65), (0,0,0), -1)
 
         cv2.putText(frame, "CLEAR ALL", (49, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
-        cv2.putText(frame, "BLUE", (185, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
-        cv2.putText(frame, "GREEN", (298, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
-        cv2.putText(frame, "RED", (420, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
-        cv2.putText(frame, "ERASER", (530, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
+        cv2.putText(frame, "RED", (185, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
+        cv2.putText(frame, "ORANGE", (298, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
+        cv2.putText(frame, "YELLOW", (405, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
+        cv2.putText(frame, "GREEN", (530, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
+        cv2.putText(frame, "CYAN", (650, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
+        cv2.putText(frame, "BLUE", (755, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
+        cv2.putText(frame, "PURPLE", (870, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
+        cv2.putText(frame, "PINK", (995, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
+        cv2.putText(frame, "ERASER", (1100, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
 
 
         if len(lmList) != 0:
@@ -87,7 +96,7 @@ def main():
             radius = 5
             center = (pos_x,pos_y)
             #IF NOT IN ERASER MODE
-            if color_index != 3:
+            if color_index != 8:
                 cv2.circle(frame,center,radius,(255,255,255),2)
             else:
                 cv2.circle(frame,center,radius,(255,255,255),20)
@@ -99,20 +108,30 @@ def main():
                     if 40 <= center[0] <= 140: 
                         paintWindow[67:,:,:] = 0 # ALL CLEAR
                     elif 160 <= center[0] <= 255:
-                            color_index = 0 # Blue
+                        color_index = 0 # RED
                     elif 275 <= center[0] <= 370:
-                            color_index = 1 # Green
+                        color_index = 1 # ORANGE
                     elif 390 <= center[0] <= 485:
-                            color_index = 2 # Red
-                    elif 500 <= center[0] <= 600:
-                            color_index = 3 # Eraser
+                        color_index = 2 # YELLOW
+                    elif 505 <= center[0] <= 600:
+                        color_index = 3 # GREEN
+                    elif 620 <= center[0] <= 715:
+                        color_index = 4 # CYAN
+                    elif 735 <= center[0] <= 830:
+                        color_index = 5 # BLUE
+                    elif 850 <= center[0] <= 945:
+                        color_index = 6 # PURPLE
+                    elif 965 <= center[0] <= 1060:
+                        color_index = 7 # PINK
+                    elif 1080 <= center[0] <= 1175:
+                        color_index = 8 # ERASER
 
             #DRAWING MODE
             elif(which_up[0] == 1):
                 #TO PREVENT LINE FROM JOINING AFTER LINE BREAK 
                 if (xp == 0 and yp == 0) or prev_state != 1  :
                     (xp,yp) = center
-                if color_index != 3:
+                if color_index != 8:
                     cv2.line(frame,(xp,yp),center,colors[color_index],2) #CAN ADD THICKNESS LATER
                     cv2.line(paintWindow,(xp,yp),center,colors[color_index],2)
                 else: 
